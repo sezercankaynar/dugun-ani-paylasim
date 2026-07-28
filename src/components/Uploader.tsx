@@ -82,14 +82,14 @@ export default function Uploader({ albumId }: { albumId: string }) {
       },
       listParts: async (_file, { uploadId, key }) => {
         const res = await fetch(
-          `/api/s3/multipart/${encodeURIComponent(uploadId)}?key=${encodeURIComponent(key)}`
+          `/api/s3/multipart/${encodeURIComponent(uploadId!)}?key=${encodeURIComponent(key!)}`
         );
         if (!res.ok) throw new Error(await res.text());
         return res.json();
       },
       signPart: async (_file, { uploadId, key, partNumber, signal }) => {
         const res = await fetch(
-          `/api/s3/multipart/${encodeURIComponent(uploadId)}/${partNumber}?key=${encodeURIComponent(key)}`,
+          `/api/s3/multipart/${encodeURIComponent(uploadId!)}/${partNumber}?key=${encodeURIComponent(key!)}`,
           { signal }
         );
         if (!res.ok) throw new Error(await res.text());
@@ -97,7 +97,7 @@ export default function Uploader({ albumId }: { albumId: string }) {
       },
       completeMultipartUpload: async (_file, { uploadId, key, parts }) => {
         const res = await fetch(
-          `/api/s3/multipart/${encodeURIComponent(uploadId)}/complete`,
+          `/api/s3/multipart/${encodeURIComponent(uploadId!)}/complete`,
           {
             method: "POST",
             headers: { "content-type": "application/json" },
@@ -109,7 +109,7 @@ export default function Uploader({ albumId }: { albumId: string }) {
       },
       abortMultipartUpload: async (_file, { uploadId, key }) => {
         await fetch(
-          `/api/s3/multipart/${encodeURIComponent(uploadId)}?key=${encodeURIComponent(key)}`,
+          `/api/s3/multipart/${encodeURIComponent(uploadId!)}?key=${encodeURIComponent(key!)}`,
           { method: "DELETE" }
         );
       },
